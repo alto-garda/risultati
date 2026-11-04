@@ -13,6 +13,11 @@
 .widget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:20px 0 28px}
 .widget-card{min-width:0;border:1px solid var(--line);border-radius:5px;padding:16px;background:#fff;overflow:hidden}
 .widget-card h2{font-size:19px;margin:0 0 12px;color:var(--text)}
-.widget-card iframe{display:block;width:100%;max-width:500px;margin:0 auto;border:0}
+.widget-card iframe{display:block;width:100%;max-width:620px;margin:0 auto;border:0}
 .widget-card:nth-child(n+3){grid-column:span 1}
 @media(max-width:680px){.widget-grid{grid-template-columns:1fr;gap:16px}.widget-card{padding:12px}.widget-card iframe{max-width:100%}}
+
+/* Widget TuttoCampo: maggiore area utile e adattamento alle schede */
+.widget-card{overflow:visible}
+.widget-card iframe{width:100%;max-width:620px}
+@media(max-width:680px){.widget-card iframe{width:100%;max-width:100%}}
