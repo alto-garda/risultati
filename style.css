@@ -68,3 +68,27 @@
   .base-activity-disclaimer{gap:14px;padding:20px 18px;margin-top:28px;margin-bottom:26px;font-size:13px;}
   .base-activity-disclaimer::before{flex-basis:44px;width:44px;height:44px;border-width:3px;font-size:29px;}
 }
+
+/* Ultima rifinitura: riquadri appena più grandi degli iframe */
+.widget-grid{
+  grid-template-columns:repeat(2,minmax(0,640px));
+  justify-content:center;
+  gap:16px;
+}
+.widget-card{
+  width:fit-content;
+  max-width:100%;
+  justify-self:center;
+  padding:8px;
+}
+.widget-card iframe{
+  display:block;
+  width:620px;
+  max-width:100%;
+  margin:0 auto;
+}
+@media(max-width:680px){
+  .widget-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+  .widget-card{width:100%;max-width:100%;padding:8px}
+  .widget-card iframe{width:100%;max-width:100%}
+}
