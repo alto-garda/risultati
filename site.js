@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{const b=document.querySelector('.menu-toggle');const p=document.querySelector('.mobile-menu-panel');if(b&&p)b.addEventListener('click',()=>{const open=p.classList.toggle('open');b.setAttribute('aria-expanded',String(open));b.textContent=open?'×':'☰';});});
