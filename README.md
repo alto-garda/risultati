@@ -1,21 +1,12 @@
-# ASD Alto Garda — Portale risultati
+# ASD Alto Garda – Portale risultati
 
-Prima struttura statica per GitHub Pages, pensata per essere pubblicata in `https://alto-garda.github.io/risultati/`.
+Versione aggiornata con header semplificato (logo + “← Torna al Sito”), favicon Alto Garda e contenitori responsive allineati ai breakpoint standard Tailwind.
 
-## Pubblicazione
+## Pubblicazione su GitHub Pages
 
-1. Aprire il repository GitHub `alto-garda/risultati` (oppure il repository già predisposto per il sito).
-2. Caricare **il contenuto** di questa cartella nella root del repository: `index.html`, `style.css`, `site.js`, `assets/` e `squadre/`.
-3. In **Settings → Pages**, selezionare la branch/cartella da cui pubblicare (normalmente `main` / `/ (root)`).
-4. Attendere il deploy di GitHub Pages.
+1. Apri il repository GitHub `alto-garda/risultati`.
+2. Carica/sostituisci il contenuto di questa cartella mantenendo la stessa struttura.
+3. Non eliminare il repository: è sufficiente sovrascrivere i file e le cartelle corrispondenti.
+4. Conferma con **Commit changes**. GitHub Pages pubblicherà automaticamente l'aggiornamento.
 
-I percorsi sono relativi e funzionano nella sottocartella `/risultati/`.
-
-## Stato delle integrazioni
-
-- Homepage e nove pagine categoria: struttura iniziale pronta.
-- Cinque agonistiche: predisposta la sezione per i widget TuttoCampo; mancano i codici embed specifici.
-- Quattro categorie di base: predisposta la sezione per i dati federali; manca la verifica tecnica dei dati/URL di gara.lnd.it.
-- I collegamenti generici al portale federale sono provvisori e andranno sostituiti con i link diretti dei rispettivi gironi/campionati.
-
-Non sono stati inventati calendari, risultati, classifiche o codici widget.
+Sono incluse la homepage, le nove pagine squadra, gli asset e i file CSS/JS.
