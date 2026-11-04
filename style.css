@@ -21,3 +21,50 @@
 .widget-card{overflow:visible}
 .widget-card iframe{width:100%;max-width:620px}
 @media(max-width:680px){.widget-card iframe{width:100%;max-width:100%}}
+
+
+/* Rifinitura schede widget: contenitori più compatti, senza spazio laterale superfluo */
+.widget-grid{grid-template-columns:repeat(2,minmax(0,620px));justify-content:center;gap:16px;margin:16px 0 24px}
+.widget-card{width:100%;max-width:620px;padding:10px}
+.widget-card h2{margin:0 0 8px;font-size:18px}
+.widget-card iframe{max-width:100%}
+@media(max-width:680px){.widget-grid{grid-template-columns:minmax(0,1fr);gap:12px}.widget-card{max-width:100%;padding:9px}.widget-card h2{margin-bottom:6px;font-size:17px}}
+
+/* Banner informativo attività di base: fascia a tutta larghezza, separata dal disclaimer federale */
+.base-activity-disclaimer{
+  display:flex;
+  align-items:center;
+  gap:22px;
+  width:100vw;
+  max-width:100vw;
+  margin:34px calc(50% - 50vw) 30px;
+  padding:24px max(24px, calc((100vw - 1400px)/2));
+  border:0;
+  border-radius:0;
+  border-left:0;
+  background:#fff4c2;
+  color:#55420a;
+  font-size:14px;
+  line-height:1.65;
+  box-shadow:inset 0 1px 0 rgba(180,130,0,.12),inset 0 -1px 0 rgba(180,130,0,.12);
+}
+.base-activity-disclaimer::before{
+  content:"i";
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 54px;
+  width:54px;
+  height:54px;
+  border:4px solid #9a7200;
+  border-radius:50%;
+  color:#795900;
+  font-family:ui-sans-serif,system-ui,sans-serif;
+  font-size:36px;
+  line-height:1;
+  font-weight:800;
+}
+@media(max-width:640px){
+  .base-activity-disclaimer{gap:14px;padding:20px 18px;margin-top:28px;margin-bottom:26px;font-size:13px;}
+  .base-activity-disclaimer::before{flex-basis:44px;width:44px;height:44px;border-width:3px;font-size:29px;}
+}
