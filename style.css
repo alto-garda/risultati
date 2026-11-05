@@ -265,3 +265,13 @@
   .widget-card:nth-child(4) iframe{height:800px}
   .widget-card:nth-child(5) iframe{height:700px}
 }
+
+/* Rifinitura precisa desktop: altezze aderenti al contenuto visibile dei widget */
+@media(min-width:1100px){
+  .widget-card:nth-child(1) iframe,
+  .widget-card:nth-child(2) iframe{height:300px}
+  .widget-card:nth-child(3) iframe{height:440px}
+  .widget-card:nth-child(4) iframe{height:545px}
+  .widget-card:nth-child(5) iframe{height:625px}
+  .widget-card{align-self:start;height:auto}
+}
