@@ -193,3 +193,22 @@
 .base-fixture-table td{border-bottom:1px solid #c8d8f5}
 .base-activity-disclaimer{margin-top:28px}
 @media(max-width:680px){.base-activity-disclaimer{margin-top:22px}}
+
+
+/* Rifinitura finale widget agonistici: proporzioni uniformi e spazi più compatti */
+@media(min-width:1100px){
+  .widget-grid{align-items:stretch;column-gap:14px;row-gap:12px}
+  .widget-card{padding:6px;border-radius:8px;overflow:hidden;min-width:0}
+  .widget-card h2{font-size:16px;line-height:1.25;margin:0 0 5px;padding:0 2px}
+  .widget-card iframe{display:block;width:100%;max-width:100%;margin:0;border:0;border-radius:7px;overflow:hidden}
+  .widget-card:nth-child(1) iframe,
+  .widget-card:nth-child(2) iframe{height:260px}
+}
+@media(min-width:681px) and (max-width:1099px){
+  .widget-card{border-radius:8px;overflow:hidden}
+  .widget-card iframe{border-radius:7px;display:block}
+}
+@media(max-width:680px){
+  .widget-card{border-radius:8px;overflow:hidden}
+  .widget-card iframe{border-radius:7px;display:block}
+}
