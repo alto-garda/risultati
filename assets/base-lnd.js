@@ -14,20 +14,25 @@
     return `${d}/${m}/${String(y).slice(-2)}`;
   };
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const squadOfName = (name) => {
+    const value = String(name ?? '').toUpperCase().trim();
+    const key = value.replace(/[()._-]+/g, ' ').replace(/\s+/g, ' ').trim();
+    if (/^ALTO GARDA(?:\s+SQ\s*B|\s+SQUADRA\s+B|\s+B|\s+NERA)$/.test(key)) return 'nera';
+    if (/^ALTO GARDA(?:\s+BLU)?$/.test(key)) return 'blu';
+    return null;
+  };
   const displayTeam = (name) => {
     const value = String(name ?? '').trim();
     if (slug !== 'pulcini-u11') return value;
-    const key = value.toUpperCase().replace(/[.\s_-]+/g, ' ').trim();
-    if (/^ALTO GARDA(?: SQ ?B| SQUADRA B| B)$/.test(key) || key === 'ALTO GARDA NERA') return 'ALTO GARDA (NERA)';
-    if (key === 'ALTO GARDA' || key === 'ALTO GARDA BLU') return 'ALTO GARDA (BLU)';
+    const squad = squadOfName(value);
+    if (squad === 'nera') return 'ALTO GARDA (NERA)';
+    if (squad === 'blu') return 'ALTO GARDA (BLU)';
     return value;
   };
-  const squadOf = (fixture) => {
-    if (slug !== 'pulcini-u11') return 'all';
-    const names = [fixture.home, fixture.away].map(name => displayTeam(name).toUpperCase());
-    if (names.includes('ALTO GARDA (NERA)')) return 'nera';
-    if (names.includes('ALTO GARDA (BLU)')) return 'blu';
-    return null;
+  // Una gara fra Blu e Nera deve comparire in entrambi i calendari.
+  const squadsOfFixture = (fixture) => {
+    if (slug !== 'pulcini-u11') return ['all'];
+    return [...new Set([squadOfName(fixture.home), squadOfName(fixture.away)].filter(Boolean))];
   };
   const matchName = (f) => f.isRest ? 'Turno di riposo' : `${displayTeam(f.home)} – ${displayTeam(f.away)}`;
   const venue = (f) => [f.field, f.fieldAddress].filter(Boolean).join(' · ');
@@ -61,7 +66,7 @@
     };
     if (slug === 'pulcini-u11') {
       ['blu','nera'].forEach(squad => {
-        const squadFixtures = fixtures.filter(f => squadOf(f) === squad);
+        const squadFixtures = fixtures.filter(f => squadsOfFixture(f).includes(squad));
         const matchScope = root.querySelector(`[data-squad-matches="${squad}"]`);
         const calendarScope = root.querySelector(`[data-squad-calendar="${squad}"]`);
         if (matchScope) renderMatchCards(matchScope, squadFixtures);
