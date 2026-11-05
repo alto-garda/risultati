@@ -1,132 +1,265 @@
 #!/usr/bin/env python3
-"""Importa il girone di andata delle quattro squadre Attività di Base da Gare LND."""
-import html, json, re, sys, time
+"""Importa i calendari del girone di andata da Gare LND per l'Attività di Base."""
+import html
+import json
+import os
+import re
+import sys
+import time
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlencode
+
 import requests
 
-ROOT=Path(__file__).resolve().parents[1]; DATA=ROOT/'data'; BASE='https://gare.lnd.it/competizione/lombardia'
-COMPETITIONS={
- 'esordienti-u13':{'campionato':'E2','girone':'E','name':'Esordienti U13'},
- 'esordienti-misti':{'campionato':'N2','girone':'A','name':'Esordienti Misti'},
- 'pulcini-u11':{'campionato':'P2','girone':'H','name':'Pulcini U11'},
- 'pulcini-u10':{'campionato':'R2','girone':'D','name':'Pulcini U10'},
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / 'data'
+BASE = 'https://gare.lnd.it/competizione/lombardia'
+LEG = os.environ.get('LND_LEG', 'first').strip().lower()
+if LEG not in ('first', 'second'):
+    raise ValueError('LND_LEG deve essere first oppure second')
+PHASE = 'Ritorno' if LEG == 'second' else 'Andata'
+COMPETITIONS = {
+    'esordienti-u13': {'campionato': 'E2', 'girone': 'E', 'name': 'Esordienti U13'},
+    'esordienti-misti': {'campionato': 'N2', 'girone': 'A', 'name': 'Esordienti Misti'},
+    'pulcini-u11': {'campionato': 'P2', 'girone': 'H', 'name': 'Pulcini U11'},
+    'pulcini-u10': {'campionato': 'R2', 'girone': 'D', 'name': 'Pulcini U10'},
 }
-S=requests.Session(); S.headers.update({'User-Agent':'Mozilla/5.0 (compatible; AltoGardaResultsBot/1.0)','Accept':'text/html,application/xhtml+xml,application/json'})
+SESSION = requests.Session()
+SESSION.headers.update({
+    'User-Agent': 'Mozilla/5.0 (compatible; AltoGardaResultsBot/1.0)',
+    'Accept': 'text/html,application/xhtml+xml,application/json',
+})
 
-def get(d,*keys):
- if isinstance(d,dict):
-  for k in keys:
-   if d.get(k) is not None:return d[k]
- return None
 
-def team_name(v):
- if isinstance(v,str):return v
- if isinstance(v,dict):return get(v,'name','denomination','description','label','teamName') or ''
- return ''
+def get(obj, *keys):
+    if isinstance(obj, dict):
+        for key in keys:
+            if obj.get(key) is not None:
+                return obj[key]
+    return None
 
-def norm(v):return re.sub(r'\s+',' ',str(v or '')).strip().upper()
-def parse_date(v):
- if not v:return None
- m=re.search(r'(20\d{2}-\d{2}-\d{2})',str(v))
- if m:return m.group(1)
- m=re.search(r'(\d{2})/(\d{2})/(20\d{2})',str(v))
- return f'{m.group(3)}-{m.group(2)}-{m.group(1)}' if m else None
-def parse_time(v):
- m=re.search(r'(\d{1,2}:\d{2})',str(v or ''))
- return m.group(1) if m else None
 
-def scan_matches(node,out):
- if isinstance(node,dict):
-  if any(k in node for k in ('home','homeTeam','teamHome','localTeam')) and any(k in node for k in ('away','awayTeam','teamAway','visitorTeam')):out.append(node)
-  for v in node.values():scan_matches(v,out)
- elif isinstance(node,list):
-  for v in node:scan_matches(v,out)
+def team_name(value):
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, dict):
+        return str(get(value, 'name', 'denomination', 'description', 'label', 'teamName') or '').strip()
+    return ''
+
+
+def norm(value):
+    return re.sub(r'\s+', ' ', str(value or '')).strip().upper()
+
+
+def is_alto_garda(value):
+    # Include la squadra principale e le denominazioni LND delle squadre collegate,
+    # ad esempio "Alto Garda Sq.b".
+    return norm(value).startswith('ALTO GARDA')
+
+
+def parse_date(value):
+    if not value:
+        return None
+    match = re.search(r'(20\d{2}-\d{2}-\d{2})', str(value))
+    if match:
+        return match.group(1)
+    match = re.search(r'(\d{2})/(\d{2})/(20\d{2})', str(value))
+    return f'{match.group(3)}-{match.group(2)}-{match.group(1)}' if match else None
+
+
+def parse_time(value):
+    match = re.search(r'(\d{1,2}:\d{2})', str(value or ''))
+    return match.group(1) if match else None
+
+
+def scan_matches(node, output):
+    if isinstance(node, dict):
+        if any(k in node for k in ('home', 'homeTeam', 'teamHome', 'localTeam')) and any(
+            k in node for k in ('away', 'awayTeam', 'teamAway', 'visitorTeam')
+        ):
+            output.append(node)
+        for value in node.values():
+            scan_matches(value, output)
+    elif isinstance(node, list):
+        for value in node:
+            scan_matches(value, output)
+
 
 def page_json(response):
- try:return response.json()
- except ValueError:
-  m=re.search(r'data-page="([^\"]+)"',response.text)
-  if not m:raise RuntimeError('Payload LND non riconosciuto')
-  return json.loads(html.unescape(m.group(1)))
+    try:
+        return response.json()
+    except ValueError:
+        match = re.search(r'data-page="([^"]+)"', response.text)
+        if not match:
+            raise RuntimeError('Payload LND non riconosciuto')
+        return json.loads(html.unescape(match.group(1)))
+
 
 def current_version(url):
- r=S.get(url,timeout=30);r.raise_for_status()
- m=re.search(r'data-page="([^\"]+)"',r.text)
- if m:
-  try:return json.loads(html.unescape(m.group(1))).get('version')
-  except Exception:pass
- return '86832c128bce74e5c6ae58b71f469bfd'
+    response = SESSION.get(url, timeout=30)
+    response.raise_for_status()
+    match = re.search(r'data-page="([^"]+)"', response.text)
+    if match:
+        try:
+            return json.loads(html.unescape(match.group(1))).get('version')
+        except (ValueError, AttributeError):
+            pass
+    return '86832c128bce74e5c6ae58b71f469bfd'
+
 
 def parse_matches(payload):
- raw=[];scan_matches(payload,raw);unique={}
- for m in raw:
-  h=team_name(get(m,'home','homeTeam','teamHome','localTeam','home_name','homeTeamName'))
-  a=team_name(get(m,'away','awayTeam','teamAway','visitorTeam','away_name','awayTeamName'))
-  if h or a:
-   mid=get(m,'id','matchId','garaId'); key=str(mid) if mid is not None else f'{h}|{a}|{get(m,"date","matchDate")}'
-   unique[key]=m
- return list(unique.values())
+    raw = []
+    scan_matches(payload, raw)
+    unique = {}
+    for match in raw:
+        home = team_name(get(match, 'home', 'homeTeam', 'teamHome', 'localTeam', 'home_name', 'homeTeamName'))
+        away = team_name(get(match, 'away', 'awayTeam', 'teamAway', 'visitorTeam', 'away_name', 'awayTeamName'))
+        if home or away:
+            match_id = get(match, 'id', 'matchId', 'garaId')
+            key = str(match_id) if match_id is not None else f'{home}|{away}|{get(match, "date", "matchDate")}'
+            unique[key] = match
+    return list(unique.values())
 
-def normalize(m,round_no,slug=None):
- h=team_name(get(m,'home','homeTeam','teamHome','localTeam','home_name','homeTeamName','local'))
- a=team_name(get(m,'away','awayTeam','teamAway','visitorTeam','away_name','awayTeamName','ospite'))
- hn, an = norm(h), norm(a)
- is_ag_home = hn.startswith('ALTO GARDA')
- is_ag_away = an.startswith('ALTO GARDA')
- rest=bool(get(m,'isRest','rest')) or (is_ag_home and not an) or (is_ag_away and not hn)
- if not (is_ag_home or is_ag_away or rest):return None
- if slug=='pulcini-u11':
-  def u11_name(value):
-   key=re.sub(r'[.\s_-]+',' ',norm(value)).strip()
-   if re.fullmatch(r'ALTO GARDA(?: SQ ?B| SQUADRA B| B)',key): return 'ALTO GARDA (NERA)'
-   if key=='ALTO GARDA': return 'ALTO GARDA (BLU)'
-   return value
-  h=u11_name(h); a=u11_name(a)
- field=get(m,'field','fieldName','facility','ground','campo'); address=get(m,'fieldAddress','address','facilityAddress','groundAddress')
- if isinstance(field,dict):field=team_name(field)
- return {'id':get(m,'id','matchId','garaId'),'giornata':round_no,'date':parse_date(get(m,'date','matchDate','datetime','startDate','data','dateTime')),'time':parse_time(get(m,'time','matchTime','hour','orario','startTime')),'home':h or 'ALTO GARDA','away':a or '', 'homeGoals':get(m,'homeGoals','homeScore','goalsHome','scoreHome','localGoals'),'awayGoals':get(m,'awayGoals','awayScore','goalsAway','scoreAway','visitorGoals'),'field':field,'fieldAddress':address,'isRest':rest,'isPlayed':bool(get(m,'isPlayed','played','isFinished')),'resultState':get(m,'resultState','status','state'),'variation':get(m,'variation','change','variationStatus')}
 
-def fetch_round(cfg,n,version):
- params={'campionato':cfg['campionato'],'giornata':n,'girone':cfg['girone'],'leg':'first','stagione':'2026'};url=BASE+'?'+urlencode(params)
- headers={'X-Inertia':'true','X-Requested-With':'XMLHttpRequest','Accept':'text/html, application/xhtml+xml','Referer':BASE,'X-Inertia-Partial-Component':'QuadroGare/Home','X-Inertia-Partial-Data':'matches,currentMatchday'}
- if version:headers['X-Inertia-Version']=version
- r=S.get(url,headers=headers,timeout=30)
- if r.status_code==409:
-  v=current_version(BASE+'?'+urlencode({'campionato':cfg['campionato'],'girone':cfg['girone'],'stagione':'2026'}))
-  if v:headers['X-Inertia-Version']=v
-  r=S.get(url,headers=headers,timeout=30)
- r.raise_for_status();return page_json(r)
+def normalize(match, round_no, slug):
+    home = team_name(get(match, 'home', 'homeTeam', 'teamHome', 'localTeam', 'home_name', 'homeTeamName', 'local'))
+    away = team_name(get(match, 'away', 'awayTeam', 'teamAway', 'visitorTeam', 'away_name', 'awayTeamName', 'ospite'))
+    home_is_ag = is_alto_garda(home)
+    away_is_ag = is_alto_garda(away)
+    explicit_rest = bool(get(match, 'isRest', 'rest'))
+    empty_opponent_rest = (home_is_ag and not away) or (away_is_ag and not home)
 
-def import_one(slug,cfg):
- base=BASE+'?'+urlencode({'campionato':cfg['campionato'],'girone':cfg['girone'],'stagione':'2026'});version=current_version(base)
- fixtures=[];seen=set();empty=0
- for n in range(1,19):
-  payload=fetch_round(cfg,n,version); round_f=[]
-  for m in parse_matches(payload):
-   f=normalize(m,n,slug)
-   if f:
-    key=str(f['id']) if f['id'] is not None else str((f['date'],f['home'],f['away']))
-    if key not in seen:seen.add(key);round_f.append(f)
-  if round_f:fixtures.extend(round_f);empty=0
-  else:
-   empty+=1
-   if n>=9 and empty>=2:break
-  time.sleep(.25)
- if len(fixtures)<5:raise RuntimeError(f'Solo {len(fixtures)} appuntamenti trovati: file precedente conservato')
- fixtures.sort(key=lambda f:(f['giornata'],f['date'] or ''))
- return {'source':'Gare LND','competition':cfg['name'],'campionato':cfg['campionato'],'girone':cfg['girone'],'season':'2026/2027','phase':'Andata','team':'ALTO GARDA','updatedAt':date.today().isoformat(),'fixtures':fixtures}
+    # REGOLA GENERALE: LND restituisce anche i riposi degli avversari.
+    # Una riga di riposo è nostra soltanto se nomina Alto Garda (inclusa Sq.B)
+    # e non contiene un avversario. I riposi delle altre società vengono scartati.
+    is_rest = (explicit_rest or empty_opponent_rest) and empty_opponent_rest
+    if is_rest:
+        if not (home_is_ag or away_is_ag):
+            return None
+    elif not (home_is_ag or away_is_ag):
+        return None
+
+    if slug == 'pulcini-u11':
+        def u11_name(value):
+            key = re.sub(r'[.\s_-]+', ' ', norm(value)).strip()
+            if re.fullmatch(r'ALTO GARDA\s+(?:SQ\s*B|SQUADRA\s+B|B|NERA)', key):
+                return 'ALTO GARDA (NERA)'
+            if key in ('ALTO GARDA', 'ALTO GARDA BLU'):
+                return 'ALTO GARDA (BLU)'
+            return value
+        home = u11_name(home)
+        away = u11_name(away)
+
+    field = get(match, 'field', 'fieldName', 'facility', 'ground', 'campo')
+    address = get(match, 'fieldAddress', 'address', 'facilityAddress', 'groundAddress')
+    if isinstance(field, dict):
+        field = team_name(field)
+
+    return {
+        'id': get(match, 'id', 'matchId', 'garaId'),
+        'giornata': round_no,
+        'date': parse_date(get(match, 'date', 'matchDate', 'datetime', 'startDate', 'data', 'dateTime')),
+        'time': parse_time(get(match, 'time', 'matchTime', 'hour', 'orario', 'startTime')),
+        'home': home or 'ALTO GARDA',
+        'away': away,
+        'homeGoals': get(match, 'homeGoals', 'homeScore', 'goalsHome', 'scoreHome', 'localGoals'),
+        'awayGoals': get(match, 'awayGoals', 'awayScore', 'goalsAway', 'scoreAway', 'visitorGoals'),
+        'field': field,
+        'fieldAddress': address,
+        'isRest': is_rest,
+        'isPlayed': bool(get(match, 'isPlayed', 'played', 'isFinished')),
+        'resultState': get(match, 'resultState', 'status', 'state'),
+        'variation': get(match, 'variation', 'change', 'variationStatus'),
+    }
+
+
+def fetch_round(config, round_no, version):
+    params = {
+        'campionato': config['campionato'], 'giornata': round_no,
+        'girone': config['girone'], 'leg': LEG, 'stagione': '2026',
+    }
+    url = BASE + '?' + urlencode(params)
+    headers = {
+        'X-Inertia': 'true', 'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'text/html, application/xhtml+xml', 'Referer': BASE,
+        'X-Inertia-Partial-Component': 'QuadroGare/Home',
+        'X-Inertia-Partial-Data': 'matches,currentMatchday',
+    }
+    if version:
+        headers['X-Inertia-Version'] = version
+    response = SESSION.get(url, headers=headers, timeout=30)
+    if response.status_code == 409:
+        version = current_version(BASE + '?' + urlencode({
+            'campionato': config['campionato'], 'girone': config['girone'], 'stagione': '2026'
+        }))
+        if version:
+            headers['X-Inertia-Version'] = version
+        response = SESSION.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+    return page_json(response)
+
+
+def import_one(slug, config):
+    base_url = BASE + '?' + urlencode({
+        'campionato': config['campionato'], 'girone': config['girone'], 'stagione': '2026'
+    })
+    version = current_version(base_url)
+    fixtures, seen = [], set()
+    empty_rounds = 0
+    for round_no in range(1, 19):
+        payload = fetch_round(config, round_no, version)
+        round_fixtures = []
+        for match in parse_matches(payload):
+            fixture = normalize(match, round_no, slug)
+            if fixture is None:
+                continue
+            key = str(fixture['id']) if fixture['id'] is not None else str(
+                (fixture['giornata'], fixture['date'], fixture['home'], fixture['away'])
+            )
+            if key not in seen:
+                seen.add(key)
+                round_fixtures.append(fixture)
+        if round_fixtures:
+            fixtures.extend(round_fixtures)
+            empty_rounds = 0
+        else:
+            empty_rounds += 1
+            if round_no >= 9 and empty_rounds >= 2:
+                break
+        time.sleep(0.25)
+
+    if len(fixtures) < 5:
+        raise RuntimeError(f'Solo {len(fixtures)} appuntamenti trovati: file precedente conservato')
+
+    fixtures.sort(key=lambda f: (f['giornata'], f['date'] or '', f['time'] or ''))
+    return {
+        'source': 'Gare LND', 'competition': config['name'],
+        'campionato': config['campionato'], 'girone': config['girone'],
+        'season': '2026/2027', 'phase': PHASE, 'team': 'ALTO GARDA',
+        'updatedAt': date.today().isoformat(), 'fixtures': fixtures,
+    }
+
 
 def main():
- DATA.mkdir(exist_ok=True);errors=[]
- for slug,cfg in COMPETITIONS.items():
-  try:
-   obj=import_one(slug,cfg);out=DATA/(slug+'.json');tmp=out.with_suffix('.json.tmp')
-   tmp.write_text(json.dumps(obj,ensure_ascii=False,indent=2),encoding='utf-8');tmp.replace(out)
-   print(f"OK {cfg['name']}: {len(obj['fixtures'])} gare/appuntamenti")
-  except Exception as e:
-   errors.append(f"{cfg['name']}: {e}");print(f"ERRORE {cfg['name']}: {e}",file=sys.stderr)
- if len(errors)==len(COMPETITIONS):sys.exit('Import LND fallito per tutte le squadre; nessun dato precedente è stato sovrascritto.')
- if errors:print('Avvisi: '+'; '.join(errors),file=sys.stderr)
-if __name__=='__main__':main()
+    DATA.mkdir(exist_ok=True)
+    errors = []
+    for slug, config in COMPETITIONS.items():
+        try:
+            obj = import_one(slug, config)
+            output = DATA / f'{slug}.json'
+            temporary = output.with_suffix('.json.tmp')
+            temporary.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding='utf-8')
+            temporary.replace(output)
+            print(f"OK {config['name']}: {len(obj['fixtures'])} gare/appuntamenti")
+        except Exception as exc:
+            errors.append(f"{config['name']}: {exc}")
+            print(f"ERRORE {config['name']}: {exc}", file=sys.stderr)
+    if len(errors) == len(COMPETITIONS):
+        sys.exit('Import LND fallito per tutte le squadre; nessun dato precedente è stato sovrascritto.')
+    if errors:
+        print('Avvisi: ' + '; '.join(errors), file=sys.stderr)
+
+
+if __name__ == '__main__':
+    main()
