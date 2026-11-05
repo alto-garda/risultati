@@ -25,22 +25,6 @@
       "variation": null
     },
     {
-      "id": 10868455,
-      "giornata": 2,
-      "date": null,
-      "time": null,
-      "home": "VIGHENZI CALCIO      SQ.B",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
       "id": 10868456,
       "giornata": 2,
       "date": "2026-10-10",
@@ -52,22 +36,6 @@
       "field": "C.S. COMUNALE N.2 (E.A)",
       "fieldAddress": "VIA LEONARDO DA VINCI N°20, SIRMIONE (BS)",
       "isRest": false,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
-      "id": 10868464,
-      "giornata": 3,
-      "date": null,
-      "time": null,
-      "home": "USO NUVOLENTO",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
       "isPlayed": false,
       "resultState": 0,
       "variation": null
@@ -89,22 +57,6 @@
       "variation": null
     },
     {
-      "id": 10868465,
-      "giornata": 4,
-      "date": null,
-      "time": null,
-      "home": "US ROVIZZA SIRMIONE ASD",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
       "id": 10868467,
       "giornata": 4,
       "date": "2026-10-24",
@@ -116,22 +68,6 @@
       "field": "C.S.DANTE GIACOMINI E.A",
       "fieldAddress": "VIA ZANARDELLI, PREVALLE (BS)",
       "isRest": false,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
-      "id": 10868473,
-      "giornata": 5,
-      "date": null,
-      "time": null,
-      "home": "GAVARDO A.C. A.S.D.",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
       "isPlayed": false,
       "resultState": 0,
       "variation": null
@@ -153,22 +89,6 @@
       "variation": "confirmed"
     },
     {
-      "id": 10868476,
-      "giornata": 6,
-      "date": null,
-      "time": null,
-      "home": "ACCADEMIA PREVALLE CALCIO",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
       "id": 10868478,
       "giornata": 6,
       "date": "2026-11-07",
@@ -180,22 +100,6 @@
       "field": "C.S.COMUNALE  (E.A)",
       "fieldAddress": "VIA SANDRO PERTINI, SABBIO CHIESE (BS)",
       "isRest": false,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
-      "id": 10868482,
-      "giornata": 7,
-      "date": null,
-      "time": null,
-      "home": "VALTENESI",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
       "isPlayed": false,
       "resultState": 0,
       "variation": null
@@ -217,22 +121,6 @@
       "variation": null
     },
     {
-      "id": 10868487,
-      "giornata": 8,
-      "date": null,
-      "time": null,
-      "home": "ACCADEMIA VALSABBIA",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
       "id": 10868489,
       "giornata": 8,
       "date": "2026-11-21",
@@ -244,22 +132,6 @@
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
       "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
-      "id": 10868491,
-      "giornata": 9,
-      "date": null,
-      "time": null,
-      "home": "FOOTBALL CLUB BEDIZZOLE",
-      "away": "",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": null,
-      "fieldAddress": null,
-      "isRest": true,
       "isPlayed": false,
       "resultState": 0,
       "variation": null
