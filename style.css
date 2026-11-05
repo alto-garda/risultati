@@ -129,3 +129,67 @@
  .base-calendar-heading{align-items:flex-start;flex-direction:column;gap:8px}
  .demo-tag{white-space:normal}
 }
+
+
+/* Ultima rifinitura richiesta: disposizione compatta dei widget agonistici */
+@media(min-width:1100px){
+  .widget-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-rows:auto auto;
+    grid-template-areas:"last next standings" "results scorers standings";
+    align-items:stretch;
+    gap:14px;
+    max-width:1800px;
+    margin:16px auto 24px;
+  }
+  .widget-card{
+    width:100%;
+    max-width:none;
+    min-width:0;
+    padding:6px;
+    justify-self:stretch;
+    align-self:stretch;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    overflow:hidden;
+  }
+  .widget-card h2{font-size:17px;margin:0 0 6px;padding:0 3px}
+  .widget-card:nth-child(1){grid-area:last}
+  .widget-card:nth-child(2){grid-area:next}
+  .widget-card:nth-child(3){grid-area:results}
+  .widget-card:nth-child(4){grid-area:standings;}
+  .widget-card:nth-child(5){grid-area:scorers}
+  .widget-card iframe{
+    width:100%;
+    max-width:100%;
+    margin:0 auto;
+    border:0;
+    border-radius:7px;
+    display:block;
+  }
+  .widget-card:nth-child(1) iframe,.widget-card:nth-child(2) iframe{height:350px}
+  .widget-card:nth-child(3) iframe{height:600px}
+  .widget-card:nth-child(4) iframe{height:1000px}
+  .widget-card:nth-child(5) iframe{height:700px}
+}
+@media(min-width:681px) and (max-width:1099px){
+  .widget-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .widget-card{width:100%;max-width:100%;padding:7px;border-radius:8px;overflow:hidden}
+  .widget-card iframe{width:100%;max-width:100%;border-radius:7px}
+}
+@media(max-width:680px){
+  .widget-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+  .widget-card{width:100%;max-width:100%;padding:7px;border-radius:8px;overflow:hidden}
+  .widget-card iframe{width:100%;max-width:100%;border-radius:7px}
+}
+
+/* Attività di base: box e righe del calendario tutti nella stessa tonalità blu */
+.base-match-card{border-top:3px solid var(--blue)!important}
+.base-fixture-table tbody tr:nth-child(odd){background:#eef4ff}
+.base-fixture-table tbody tr:nth-child(even){background:#e2ecff}
+.base-fixture-table tbody tr:hover{background:#d5e3ff}
+.base-fixture-table td{border-bottom:1px solid #c8d8f5}
+.base-activity-disclaimer{margin-top:28px}
+@media(max-width:680px){.base-activity-disclaimer{margin-top:22px}}
