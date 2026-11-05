@@ -285,3 +285,40 @@
   .widget-card:nth-child(5) iframe{height:700px}
   .widget-card{align-self:start;height:auto}
 }
+
+/* Rifinitura mobile richiesta: header compatto, schede senza riquadri e calendari leggibili */
+@media(max-width:680px){
+  .site-header{height:72px;min-height:72px}
+  .header-inner{height:72px;min-height:72px;padding-top:0;padding-bottom:0;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:1fr;gap:8px}
+  .site-header .brand{grid-column:1;grid-row:1;font-size:15px;gap:7px}
+  .site-header .brand img{height:30px}
+  .portal-title{display:none}
+  .back-to-site{grid-column:2;grid-row:1;font-size:12px;white-space:nowrap}
+  .team-type,.team-card .category{display:none!important}
+  .team-hero{padding:14px 0 10px}
+  .team-hero h1{font-size:27px;margin:2px 0 5px}
+  .team-hero .accent-line{margin:8px 0 10px}
+  .action-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+  .action-link{font-size:11px;line-height:1.15;padding:8px 9px;min-height:32px;white-space:nowrap}
+  .action-link.secondary{order:0}
+  .action-link:not(.secondary){order:1}
+  .action-link[href*="gare.lnd.it"]{font-size:0;padding:8px 10px}
+  .action-link[href*="gare.lnd.it"]::after{content:"Link LND ↗";font-size:11px}
+  .widget-grid{display:block;margin:12px 0 20px;gap:0}
+  .widget-card{display:contents!important}
+  .widget-card h2{display:block;margin:14px 0 5px;padding:0 2px;font-size:16px;line-height:1.25}
+  .widget-card iframe{display:block;width:100%!important;max-width:100%!important;margin:0 0 14px!important;border:0!important;border-radius:0!important}
+  .base-calendar{padding:12px 8px;border-radius:6px}
+  .base-calendar-heading{flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:6px!important;margin-bottom:8px!important}
+  .base-calendar-heading h2{font-size:19px!important}
+  .base-fixture-table{width:100%;min-width:0!important;table-layout:fixed;font-size:11px}
+  .base-fixture-table th{padding:7px 4px;font-size:9px;letter-spacing:0}
+  .base-fixture-table td{padding:8px 4px;font-size:10px;line-height:1.3;overflow-wrap:anywhere}
+  .base-fixture-table th:nth-child(1),.base-fixture-table td:nth-child(1){width:8%;text-align:center;white-space:nowrap}
+  .base-fixture-table th:nth-child(2),.base-fixture-table td:nth-child(2){width:21%;white-space:normal}
+  .base-fixture-table th:nth-child(3),.base-fixture-table td:nth-child(3){width:43%}
+  .base-fixture-table th:nth-child(4),.base-fixture-table td:nth-child(4){width:28%}
+  .fixture-time{display:block;font-size:10px;font-weight:700;color:#64748b;margin-top:2px}
+  .fixture-match{font-weight:650}
+  .fixture-field{font-size:9px!important;color:#64748b!important}
+}

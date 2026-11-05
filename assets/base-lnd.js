@@ -59,7 +59,7 @@
       const tbody = scope.querySelector('.base-fixture-table tbody');
       if (tbody) tbody.innerHTML = squadFixtures.map(f => {
         const fixture = f.isRest ? 'Turno di riposo' : matchName(f);
-        return `<tr><td>${esc(f.giornata)}</td><td>${esc(fmtDate(f.date))}</td><td>${esc(f.time || '—')}</td><td>${esc(fixture)}</td><td>${esc(venue(f) || '—')}</td></tr>`;
+        return `<tr><td class="fixture-round">${esc(f.giornata)}</td><td class="fixture-date">${esc(fmtDate(f.date))}<span class="fixture-time">${esc(f.time || '—')}</span></td><td class="fixture-match">${esc(fixture)}</td><td class="fixture-field">${esc(venue(f) || '—')}</td></tr>`;
       }).join('');
       const calendarBadge = scope.querySelector('.base-calendar-badge');
       if (calendarBadge) calendarBadge.textContent = data.updatedAt ? `AGGIORNATO ${fmtShortDate(data.updatedAt)}` : 'AGGIORNAMENTO NON DISPONIBILE';
