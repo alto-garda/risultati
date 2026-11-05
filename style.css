@@ -322,3 +322,41 @@
   .fixture-match{font-weight:650}
   .fixture-field{font-size:9px!important;color:#64748b!important}
 }
+
+
+/* Correzioni mobile su feedback 05/11/2026 */
+@media(max-width:680px){
+  /* Header allineato all'altezza mobile del sito principale */
+  .site-header{height:78px!important;min-height:78px!important}
+  .header-inner{height:78px!important;min-height:78px!important}
+  .site-header .brand img{height:30px!important}
+
+  /* Widget TuttoCampo: riduzione degli spazi esterni e delle altezze vuote */
+  .widget-grid{margin:8px 0 12px!important}
+  .widget-card h2{margin:8px 0 4px!important}
+  .widget-card iframe{margin:0 0 8px!important}
+  .widget-card:nth-child(1) iframe,
+  .widget-card:nth-child(2) iframe{height:270px!important}
+  .widget-card:nth-child(3) iframe{height:460px!important}
+  .widget-card:nth-child(4) iframe{height:620px!important}
+  .widget-card:nth-child(5) iframe{height:520px!important}
+
+  /* Calendari base: tre colonne per la gara, campo su riga intera */
+  .base-fixture-table{table-layout:fixed!important;width:100%!important}
+  .base-fixture-table th:nth-child(1),.base-fixture-table td:nth-child(1){width:8%!important}
+  .base-fixture-table th:nth-child(2),.base-fixture-table td:nth-child(2){width:22%!important}
+  .base-fixture-table th:nth-child(3),.base-fixture-table td:nth-child(3){width:70%!important}
+  .base-fixture-table th:nth-child(4),.base-fixture-table td:nth-child(4){display:none!important}
+  .base-fixture-table .fixture-venue-row{display:table-row!important}
+  .base-fixture-table .fixture-venue-row td{
+    display:table-cell!important;width:100%!important;padding:5px 8px 9px!important;
+    border-top:0!important;font-size:10px!important;line-height:1.35!important;
+    color:#64748b!important;text-align:left!important;overflow-wrap:anywhere
+  }
+  .fixture-venue-label{display:inline-block;margin-right:6px;font-size:8px;font-weight:800;letter-spacing:.04em;color:#94a3b8}
+  .base-fixture-table .fixture-main-row td{padding:8px 4px 4px!important;vertical-align:top}
+  .base-fixture-table .fixture-match{font-size:11px!important;line-height:1.35!important}
+}
+@media(min-width:681px){
+  .base-fixture-table .fixture-venue-row{display:none}
+}
