@@ -18,9 +18,16 @@
     const value = String(name ?? '').trim();
     if (slug !== 'pulcini-u11') return value;
     const key = value.toUpperCase().replace(/[.\s_-]+/g, ' ').trim();
-    if (/^ALTO GARDA(?: SQ ?B| SQUADRA B| B)$/.test(key)) return 'ALTO GARDA (NERA)';
-    if (key === 'ALTO GARDA') return 'ALTO GARDA (BLU)';
+    if (/^ALTO GARDA(?: SQ ?B| SQUADRA B| B)$/.test(key) || key === 'ALTO GARDA NERA') return 'ALTO GARDA (NERA)';
+    if (key === 'ALTO GARDA' || key === 'ALTO GARDA BLU') return 'ALTO GARDA (BLU)';
     return value;
+  };
+  const squadOf = (fixture) => {
+    if (slug !== 'pulcini-u11') return 'all';
+    const names = [fixture.home, fixture.away].map(name => displayTeam(name).toUpperCase());
+    if (names.includes('ALTO GARDA (NERA)')) return 'nera';
+    if (names.includes('ALTO GARDA (BLU)')) return 'blu';
+    return null;
   };
   const matchName = (f) => f.isRest ? 'Turno di riposo' : `${displayTeam(f.home)} – ${displayTeam(f.away)}`;
   const venue = (f) => [f.field, f.fieldAddress].filter(Boolean).join(' · ');
@@ -35,24 +42,40 @@
     const fixtures = (data.fixtures || []).slice().sort((a,b) => (a.date || '').localeCompare(b.date || '') || a.giornata-b.giornata);
     if (!fixtures.length) throw new Error('Calendario vuoto');
     const today = new Date(); today.setHours(0,0,0,0);
-    const dated = fixtures.filter(f => f.date && !f.isRest);
-    const previous = dated.filter(f => new Date(`${f.date}T00:00:00`) < today).slice(-1)[0];
-    const next = dated.find(f => new Date(`${f.date}T00:00:00`) >= today);
-    const cards = root.querySelectorAll('.base-match-card');
-    if (cards[0]) cards[0].innerHTML = `<h2>Ultima partita</h2>${cardContent(previous, false)}`;
-    if (cards[1]) cards[1].innerHTML = `<h2>Prossima partita</h2>${cardContent(next, true)}`;
+    const renderMatchCards = (scope, squadFixtures) => {
+      const dated = squadFixtures.filter(f => f.date && !f.isRest);
+      const previous = dated.filter(f => new Date(`${f.date}T00:00:00`) < today).slice(-1)[0];
+      const next = dated.find(f => new Date(`${f.date}T00:00:00`) >= today);
+      const cards = scope.querySelectorAll('.base-match-card');
+      if (cards[0]) cards[0].innerHTML = `<h2>Ultima partita</h2>${cardContent(previous, false)}`;
+      if (cards[1]) cards[1].innerHTML = `<h2>Prossima partita</h2>${cardContent(next, true)}`;
+    };
+    const renderCalendar = (scope, squadFixtures) => {
+      const tbody = scope.querySelector('.base-fixture-table tbody');
+      if (tbody) tbody.innerHTML = squadFixtures.map(f => {
+        const fixture = f.isRest ? 'Turno di riposo' : matchName(f);
+        return `<tr><td>${esc(f.giornata)}</td><td>${esc(fmtDate(f.date))}</td><td>${esc(f.time || '—')}</td><td>${esc(fixture)}</td><td>${esc(venue(f) || '—')}</td></tr>`;
+      }).join('');
+      const calendarBadge = scope.querySelector('.base-calendar-badge');
+      if (calendarBadge) calendarBadge.textContent = data.updatedAt ? `AGGIORNATO ${fmtShortDate(data.updatedAt)}` : 'AGGIORNAMENTO NON DISPONIBILE';
+    };
+    if (slug === 'pulcini-u11') {
+      ['blu','nera'].forEach(squad => {
+        const squadFixtures = fixtures.filter(f => squadOf(f) === squad);
+        const matchScope = root.querySelector(`[data-squad-matches="${squad}"]`);
+        const calendarScope = root.querySelector(`[data-squad-calendar="${squad}"]`);
+        if (matchScope) renderMatchCards(matchScope, squadFixtures);
+        if (calendarScope) renderCalendar(calendarScope, squadFixtures);
+      });
+    } else {
+      renderMatchCards(root, fixtures);
+      renderCalendar(root, fixtures);
+    }
     const badge = root.querySelector('.demo-tag'); if (badge) badge.remove();
-    const tbody = root.querySelector('.base-fixture-table tbody');
-    if (tbody) tbody.innerHTML = fixtures.map(f => {
-      const fixture = f.isRest ? 'Turno di riposo' : matchName(f);
-      return `<tr><td>${esc(f.giornata)}</td><td>${esc(fmtDate(f.date))}</td><td>${esc(f.time || '—')}</td><td>${esc(fixture)}</td><td>${esc(venue(f) || '—')}</td></tr>`;
-    }).join('');
-    const calendarBadge = root.querySelector('.base-calendar-badge');
-    if (calendarBadge) calendarBadge.textContent = data.updatedAt ? `AGGIORNATO ${fmtShortDate(data.updatedAt)}` : 'AGGIORNAMENTO NON DISPONIBILE';
     root.dataset.loaded = 'true';
-  }).catch(err => {
+    }).catch(err => {
     console.error('Import calendario LND:', err);
-    const calendarBadge = root.querySelector('.base-calendar-badge');
-    if (calendarBadge) { calendarBadge.textContent = 'DATI NON DISPONIBILI'; calendarBadge.style.background = '#fee2e2'; calendarBadge.style.color = '#991b1b'; }
+    const calendarBadges = root.querySelectorAll('.base-calendar-badge');
+    calendarBadges.forEach(calendarBadge => { calendarBadge.textContent = 'DATI NON DISPONIBILI'; calendarBadge.style.background = '#fee2e2'; calendarBadge.style.color = '#991b1b'; });
   });
 })();
