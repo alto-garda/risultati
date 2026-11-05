@@ -212,3 +212,34 @@
   .widget-card{border-radius:8px;overflow:hidden}
   .widget-card iframe{border-radius:7px;display:block}
 }
+
+/* Layout agonistiche: due partite a tutta larghezza sopra, tre widget sotto */
+@media(min-width:1100px){
+  .widget-grid{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    grid-template-areas:
+      "last last last next next next"
+      "standings standings results results scorers scorers";
+    grid-template-rows:auto auto;
+    align-items:stretch;
+    column-gap:14px;
+    row-gap:14px;
+    max-width:1800px;
+    margin:16px auto 24px;
+  }
+  .widget-card{min-width:0;width:100%;max-width:none;padding:6px;border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}
+  .widget-card h2{font-size:16px;line-height:1.25;margin:0 0 5px;padding:0 2px}
+  .widget-card:nth-child(1){grid-area:last}
+  .widget-card:nth-child(2){grid-area:next}
+  .widget-card:nth-child(3){grid-area:results}
+  .widget-card:nth-child(4){grid-area:standings}
+  .widget-card:nth-child(5){grid-area:scorers}
+  .widget-card iframe{display:block;width:100%;max-width:100%;margin:0;border:0;border-radius:7px;overflow:hidden}
+  /* Stessa altezza per le due partite, con margine per tutti i marcatori */
+  .widget-card:nth-child(1) iframe,.widget-card:nth-child(2) iframe{height:320px}
+  /* Altezze complete dei widget inferiori: evitare il taglio dei contenuti */
+  .widget-card:nth-child(3) iframe{height:744px}
+  .widget-card:nth-child(4) iframe{height:992px}
+  .widget-card:nth-child(5) iframe{height:868px}
+}
