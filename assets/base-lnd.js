@@ -8,6 +8,11 @@
     const [y, m, d] = value.split('-');
     return `${d}/${m}/${y}`;
   };
+  const fmtShortDate = (value) => {
+    if (!value) return '';
+    const [y, m, d] = value.split('-');
+    return `${d}/${m}/${String(y).slice(-2)}`;
+  };
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const displayTeam = (name) => {
     const value = String(name ?? '').trim();
@@ -42,12 +47,12 @@
       const fixture = f.isRest ? 'Turno di riposo' : matchName(f);
       return `<tr><td>${esc(f.giornata)}</td><td>${esc(fmtDate(f.date))}</td><td>${esc(f.time || '—')}</td><td>${esc(fixture)}</td><td>${esc(venue(f) || '—')}</td></tr>`;
     }).join('');
-    const note = root.querySelector('.base-calendar-note');
-    if (note) note.textContent = `Calendario del girone di andata acquisito dal portale ufficiale Gare LND. Ultimo aggiornamento: ${fmtDate(data.updatedAt)}. Eventuali variazioni saranno recepite al successivo aggiornamento.`;
+    const calendarBadge = root.querySelector('.base-calendar-badge');
+    if (calendarBadge) calendarBadge.textContent = data.updatedAt ? `AGGIORNATO ${fmtShortDate(data.updatedAt)}` : 'AGGIORNAMENTO NON DISPONIBILE';
     root.dataset.loaded = 'true';
   }).catch(err => {
     console.error('Import calendario LND:', err);
-    const note = root.querySelector('.base-calendar-note');
-    if (note) note.textContent = 'Il calendario ufficiale LND non è momentaneamente disponibile. Riprova più tardi.';
+    const calendarBadge = root.querySelector('.base-calendar-badge');
+    if (calendarBadge) { calendarBadge.textContent = 'DATI NON DISPONIBILI'; calendarBadge.style.background = '#fee2e2'; calendarBadge.style.color = '#991b1b'; }
   });
 })();
