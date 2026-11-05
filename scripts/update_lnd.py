@@ -69,11 +69,21 @@ def parse_matches(payload):
    unique[key]=m
  return list(unique.values())
 
-def normalize(m,round_no):
+def normalize(m,round_no,slug=None):
  h=team_name(get(m,'home','homeTeam','teamHome','localTeam','home_name','homeTeamName','local'))
  a=team_name(get(m,'away','awayTeam','teamAway','visitorTeam','away_name','awayTeamName','ospite'))
- rest=bool(get(m,'isRest','rest')) or (norm(h)=='ALTO GARDA' and not norm(a)) or (norm(a)=='ALTO GARDA' and not norm(h))
- if 'ALTO GARDA' not in (norm(h),norm(a)) and not rest:return None
+ hn, an = norm(h), norm(a)
+ is_ag_home = hn.startswith('ALTO GARDA')
+ is_ag_away = an.startswith('ALTO GARDA')
+ rest=bool(get(m,'isRest','rest')) or (is_ag_home and not an) or (is_ag_away and not hn)
+ if not (is_ag_home or is_ag_away or rest):return None
+ if slug=='pulcini-u11':
+  def u11_name(value):
+   key=re.sub(r'[.\s_-]+',' ',norm(value)).strip()
+   if re.fullmatch(r'ALTO GARDA(?: SQ ?B| SQUADRA B| B)',key): return 'ALTO GARDA (NERA)'
+   if key=='ALTO GARDA': return 'ALTO GARDA (BLU)'
+   return value
+  h=u11_name(h); a=u11_name(a)
  field=get(m,'field','fieldName','facility','ground','campo'); address=get(m,'fieldAddress','address','facilityAddress','groundAddress')
  if isinstance(field,dict):field=team_name(field)
  return {'id':get(m,'id','matchId','garaId'),'giornata':round_no,'date':parse_date(get(m,'date','matchDate','datetime','startDate','data','dateTime')),'time':parse_time(get(m,'time','matchTime','hour','orario','startTime')),'home':h or 'ALTO GARDA','away':a or '', 'homeGoals':get(m,'homeGoals','homeScore','goalsHome','scoreHome','localGoals'),'awayGoals':get(m,'awayGoals','awayScore','goalsAway','scoreAway','visitorGoals'),'field':field,'fieldAddress':address,'isRest':rest,'isPlayed':bool(get(m,'isPlayed','played','isFinished')),'resultState':get(m,'resultState','status','state'),'variation':get(m,'variation','change','variationStatus')}
@@ -95,7 +105,7 @@ def import_one(slug,cfg):
  for n in range(1,19):
   payload=fetch_round(cfg,n,version); round_f=[]
   for m in parse_matches(payload):
-   f=normalize(m,n)
+   f=normalize(m,n,slug)
    if f:
     key=str(f['id']) if f['id'] is not None else str((f['date'],f['home'],f['away']))
     if key not in seen:seen.add(key);round_f.append(f)

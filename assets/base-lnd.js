@@ -9,12 +9,19 @@
     return `${d}/${m}/${y}`;
   };
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const matchName = (f) => f.isRest ? 'Turno di riposo' : `${f.home} – ${f.away}`;
+  const displayTeam = (name) => {
+    const value = String(name ?? '').trim();
+    if (slug !== 'pulcini-u11') return value;
+    const key = value.toUpperCase().replace(/[.\s_-]+/g, ' ').trim();
+    if (/^ALTO GARDA(?: SQ ?B| SQUADRA B| B)$/.test(key)) return 'ALTO GARDA (NERA)';
+    if (key === 'ALTO GARDA') return 'ALTO GARDA (BLU)';
+    return value;
+  };
+  const matchName = (f) => f.isRest ? 'Turno di riposo' : `${displayTeam(f.home)} – ${displayTeam(f.away)}`;
   const venue = (f) => [f.field, f.fieldAddress].filter(Boolean).join(' · ');
   const cardContent = (f, next) => {
     if (!f) return `<div class="base-match-placeholder">${next ? 'Il prossimo appuntamento non è ancora disponibile.' : 'Non risultano appuntamenti precedenti.'}</div>`;
-    const opponent = f.isRest ? 'Turno di riposo' : (String(f.home).toUpperCase().includes('ALTO GARDA') ? f.away : f.home);
-    return `<div class="base-match-placeholder">${esc(opponent || 'Turno di riposo')}</div><p class="base-match-meta">${esc(fmtDate(f.date))}${f.time ? ' · '+esc(f.time) : ''}${venue(f) ? '<br>'+esc(venue(f)) : ''}</p>`;
+    return `<div class="base-match-placeholder">${esc(matchName(f) || 'Turno di riposo')}</div><p class="base-match-meta">${esc(fmtDate(f.date))}${f.time ? ' · '+esc(f.time) : ''}${venue(f) ? '<br>'+esc(venue(f)) : ''}</p>`;
   };
   fetch(dataUrl, { cache: 'no-store' }).then(r => {
     if (!r.ok) throw new Error('Dati LND non disponibili');
@@ -27,8 +34,8 @@
     const previous = dated.filter(f => new Date(`${f.date}T00:00:00`) < today).slice(-1)[0];
     const next = dated.find(f => new Date(`${f.date}T00:00:00`) >= today);
     const cards = root.querySelectorAll('.base-match-card');
-    if (cards[0]) cards[0].innerHTML = `<div class="base-match-label">ULTIMO APPUNTAMENTO</div><h2>Ultima partita</h2>${cardContent(previous, false)}`;
-    if (cards[1]) cards[1].innerHTML = `<div class="base-match-label">PROSSIMO APPUNTAMENTO</div><h2>Prossima partita</h2>${cardContent(next, true)}`;
+    if (cards[0]) cards[0].innerHTML = `<h2>Ultima partita</h2>${cardContent(previous, false)}`;
+    if (cards[1]) cards[1].innerHTML = `<h2>Prossima partita</h2>${cardContent(next, true)}`;
     const badge = root.querySelector('.demo-tag'); if (badge) badge.remove();
     const tbody = root.querySelector('.base-fixture-table tbody');
     if (tbody) tbody.innerHTML = fixtures.map(f => {
