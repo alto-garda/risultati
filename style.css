@@ -243,3 +243,25 @@
   .widget-card:nth-child(4) iframe{height:992px}
   .widget-card:nth-child(5) iframe{height:868px}
 }
+
+
+/* Correzione dimensioni riga inferiore: widget compatti, non stirati */
+@media(min-width:1100px){
+  .widget-grid{
+    grid-template-areas:
+      "last last last next next next"
+      "standings standings results results scorers scorers";
+    align-items:start;
+    row-gap:14px;
+  }
+  .widget-card{
+    align-self:start;
+    height:auto;
+  }
+  .widget-card:nth-child(1) iframe,
+  .widget-card:nth-child(2) iframe{height:320px}
+  /* Dimensioni native dei widget TuttoCampo, senza ingrandimenti proporzionali */
+  .widget-card:nth-child(3) iframe{height:600px}
+  .widget-card:nth-child(4) iframe{height:800px}
+  .widget-card:nth-child(5) iframe{height:700px}
+}
