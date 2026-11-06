@@ -406,3 +406,22 @@
   .fixture-venue-label{display:none!important}
   .base-fixture-table .fixture-main-row td:nth-child(3){overflow-wrap:anywhere!important;word-break:normal!important}
 }
+
+/* Rifinitura finale header mobile: badge sotto il nome e link al sito sempre visibile. */
+.brand-copy{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}
+.portal-title-mobile-inline{display:none}
+@media(max-width:680px){
+  .site-header{height:92px!important;min-height:92px!important}
+  .header-inner{height:92px!important;min-height:92px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:8px 14px!important;gap:10px!important}
+  .site-header .brand{display:flex!important;align-items:center!important;gap:8px!important;min-width:0;font-size:17px!important;line-height:1.05!important;white-space:nowrap}
+  .site-header .brand img{height:36px!important;width:auto!important;flex:0 0 auto}
+  .brand-copy{align-items:center!important;gap:5px!important}
+  .portal-title{display:none!important}
+  .portal-title-mobile-inline{display:inline-flex!important;align-items:center;justify-content:center;border:1.5px solid var(--blue);border-radius:999px;padding:3px 9px;color:var(--blue);font-size:9px;font-weight:800;letter-spacing:.07em;line-height:1;white-space:nowrap}
+  .back-to-site{display:inline-flex!important;align-items:center!important;justify-self:auto!important;flex:0 0 auto;font-size:11px!important;font-weight:700!important;gap:4px!important;white-space:nowrap!important}
+}
+@media(max-width:380px){
+  .site-header .brand{font-size:15px!important;gap:6px!important}
+  .site-header .brand img{height:32px!important}
+  .back-to-site{font-size:10px!important;gap:3px!important}
+}
