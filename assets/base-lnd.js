@@ -35,6 +35,9 @@
     return [...new Set([squadOfName(fixture.home), squadOfName(fixture.away)].filter(Boolean))];
   };
   const matchName = (f) => f.isRest ? 'Turno di riposo' : `${displayTeam(f.home)} – ${displayTeam(f.away)}`;
+  const matchMarkup = (f) => f.isRest
+    ? 'Turno di riposo'
+    : `<span class="fixture-home">${esc(displayTeam(f.home))}</span><span class="fixture-vs">(VS)</span><span class="fixture-away">${esc(displayTeam(f.away))}</span>`;
   const venue = (f) => [f.field, f.fieldAddress].filter(Boolean).join(' · ');
   const icon = (name) => {
     const paths = {
@@ -65,8 +68,8 @@
     const renderCalendar = (scope, squadFixtures) => {
       const tbody = scope.querySelector('.base-fixture-table tbody');
       if (tbody) tbody.innerHTML = squadFixtures.map(f => {
-        const fixture = f.isRest ? 'Turno di riposo' : matchName(f);
-        return `<tr class="fixture-main-row"><td class="fixture-round">${esc(f.giornata)}</td><td class="fixture-date">${esc(fmtDate(f.date))}<span class="fixture-time">${esc(f.time || '—')}</span></td><td class="fixture-match">${esc(fixture)}</td><td class="fixture-field">${esc(venue(f) || '—')}</td></tr><tr class="fixture-venue-row"><td colspan="4">${esc(venue(f) || '—')}</td></tr>`;
+        const fixture = matchMarkup(f);
+        return `<tr class="fixture-main-row"><td class="fixture-round">${esc(f.giornata)}</td><td class="fixture-date">${esc(fmtDate(f.date))}<span class="fixture-time">${esc(f.time || '—')}</span></td><td class="fixture-match">${fixture}</td><td class="fixture-field">${esc(venue(f) || '—')}</td></tr><tr class="fixture-venue-row"><td colspan="4">${esc(venue(f) || '—')}</td></tr>`;
       }).join('');
       const calendarBadge = scope.querySelector('.base-calendar-badge');
       if (calendarBadge) calendarBadge.textContent = data.updatedAt ? `AGGIORNATO ${fmtShortDate(data.updatedAt)}` : 'AGGIORNAMENTO NON DISPONIBILE';
