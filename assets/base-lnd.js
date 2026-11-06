@@ -36,6 +36,13 @@
   };
   const matchName = (f) => f.isRest ? 'Turno di riposo' : `${displayTeam(f.home)} – ${displayTeam(f.away)}`;
   const venue = (f) => [f.field, f.fieldAddress].filter(Boolean).join(' · ');
+  const icon = (name) => {
+    const paths = {
+      clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+      calendar: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'
+    };
+    return `<svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths[name] || paths.calendar}</svg>`;
+  };
   const cardContent = (f, next) => {
     if (!f) return `<div class="base-match-placeholder">${next ? 'Il prossimo appuntamento non è ancora disponibile.' : 'Non risultano appuntamenti precedenti.'}</div>`;
     return `<div class="base-match-placeholder">${esc(matchName(f) || 'Turno di riposo')}</div><p class="base-match-meta">${esc(fmtDate(f.date))}${f.time ? ' · '+esc(f.time) : ''}${venue(f) ? '<br>'+esc(venue(f)) : ''}</p>`;
@@ -52,14 +59,14 @@
       const previous = dated.filter(f => new Date(`${f.date}T00:00:00`) < today).slice(-1)[0];
       const next = dated.find(f => new Date(`${f.date}T00:00:00`) >= today);
       const cards = scope.querySelectorAll('.base-match-card');
-      if (cards[0]) cards[0].innerHTML = `<h2>Ultima partita</h2>${cardContent(previous, false)}`;
-      if (cards[1]) cards[1].innerHTML = `<h2>Prossima partita</h2>${cardContent(next, true)}`;
+      if (cards[0]) cards[0].innerHTML = `<h2>${icon('clock')}ULTIMA PARTITA</h2>${cardContent(previous, false)}`;
+      if (cards[1]) cards[1].innerHTML = `<h2>${icon('clock')}PROSSIMA PARTITA</h2>${cardContent(next, true)}`;
     };
     const renderCalendar = (scope, squadFixtures) => {
       const tbody = scope.querySelector('.base-fixture-table tbody');
       if (tbody) tbody.innerHTML = squadFixtures.map(f => {
         const fixture = f.isRest ? 'Turno di riposo' : matchName(f);
-        return `<tr class="fixture-main-row"><td class="fixture-round">${esc(f.giornata)}</td><td class="fixture-date">${esc(fmtDate(f.date))}<span class="fixture-time">${esc(f.time || '—')}</span></td><td class="fixture-match">${esc(fixture)}</td><td class="fixture-field">${esc(venue(f) || '—')}</td></tr><tr class="fixture-venue-row"><td colspan="4"><span class="fixture-venue-label">CAMPO</span>${esc(venue(f) || '—')}</td></tr>`;
+        return `<tr class="fixture-main-row"><td class="fixture-round">${esc(f.giornata)}</td><td class="fixture-date">${esc(fmtDate(f.date))}<span class="fixture-time">${esc(f.time || '—')}</span></td><td class="fixture-match">${esc(fixture)}</td><td class="fixture-field">${esc(venue(f) || '—')}</td></tr><tr class="fixture-venue-row"><td colspan="4">${esc(venue(f) || '—')}</td></tr>`;
       }).join('');
       const calendarBadge = scope.querySelector('.base-calendar-badge');
       if (calendarBadge) calendarBadge.textContent = data.updatedAt ? `AGGIORNATO ${fmtShortDate(data.updatedAt)}` : 'AGGIORNAMENTO NON DISPONIBILE';

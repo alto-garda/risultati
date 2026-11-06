@@ -360,3 +360,49 @@
 @media(min-width:681px){
   .base-fixture-table .fixture-venue-row{display:none}
 }
+
+
+/* Rifinitura conclusiva mobile/desktop - novembre 2026 */
+.site-header{height:100px}
+.header-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.site-header .brand{font-size:24px;gap:12px}
+.site-header .brand img{height:44px;width:auto}
+.portal-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--blue);border-radius:999px;padding:7px 16px;color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.08em;line-height:1;white-space:nowrap}
+.portal-title-mobile{display:none}
+.section-icon{display:inline-block;width:21px;height:21px;flex:0 0 21px;vertical-align:-4px;margin-right:9px;color:var(--blue)}
+.widget-card h2,.base-match-card h2,.base-calendar-heading h2{display:flex;align-items:center;gap:0}
+@media(max-width:680px){
+  .site-header{height:88px!important;min-height:88px!important}
+  .header-inner{height:88px!important;min-height:88px!important;display:flex!important;justify-content:flex-start!important;padding-left:18px!important;padding-right:18px!important;gap:0!important}
+  .site-header .brand{font-size:19px!important;gap:9px!important;min-width:0}
+  .site-header .brand img{height:40px!important;width:auto!important}
+  .portal-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:6px 10px;font-size:10px;letter-spacing:.05em;border-width:2px;z-index:1}
+  .portal-title-desktop{display:none}
+  .portal-title-mobile{display:inline}
+  .back-to-site{display:none!important}
+  .section-icon{width:19px;height:19px;flex-basis:19px;margin-right:7px}
+  .widget-grid{display:block!important;margin:8px 0 14px!important}
+  .widget-card{display:contents!important}
+  .widget-card h2{display:flex!important;align-items:center;margin:12px 0 5px!important;padding:0 2px;font-size:16px!important;line-height:1.3}
+  .widget-card iframe{display:block;width:100%!important;max-width:100%!important;margin:0 0 12px!important;border:0!important;border-radius:0!important}
+  /* I widget hanno altezze sufficienti a non troncare il contenuto; niente altezze minime dei box esterni. */
+  .widget-card:nth-child(1) iframe,.widget-card:nth-child(2) iframe{height:320px!important}
+  .widget-card:nth-child(3) iframe{height:600px!important}
+  .widget-card:nth-child(4) iframe{height:800px!important}
+  .widget-card:nth-child(5) iframe{height:700px!important}
+  /* U11: ordine lineare Blu ultima, Nera ultima, Blu prossima, Nera prossima, poi calendari. */
+  .base-match-section{display:flex!important;flex-direction:column!important;gap:14px!important}
+  .base-squad-block{display:contents!important}
+  .base-squad-block .base-match-grid{display:contents!important}
+  .base-squad-block[data-squad-matches="blu"] .base-match-card:first-child{order:1}
+  .base-squad-block[data-squad-matches="nera"] .base-match-card:first-child{order:2}
+  .base-squad-block[data-squad-matches="blu"] .base-match-card:nth-child(2){order:3}
+  .base-squad-block[data-squad-matches="nera"] .base-match-card:nth-child(2){order:4}
+  .base-calendar[data-squad-calendar="blu"]{order:5}
+  .base-calendar[data-squad-calendar="nera"]{order:6}
+  .base-match-card{margin:0!important}
+  .base-match-card h2{font-size:17px!important;margin:0 0 8px!important}
+  .base-fixture-table .fixture-venue-row td{overflow-wrap:anywhere!important;word-break:normal!important;white-space:normal!important;padding:5px 8px 9px!important}
+  .fixture-venue-label{display:none!important}
+  .base-fixture-table .fixture-main-row td:nth-child(3){overflow-wrap:anywhere!important;word-break:normal!important}
+}
