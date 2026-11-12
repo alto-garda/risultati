@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-10",
+  "updatedAt": "2026-11-12",
   "fixtures": [
     {
       "id": 10868453,
@@ -79,13 +79,13 @@
       "time": "15:30",
       "home": "ALTO GARDA",
       "away": "VALTENESI",
-      "homeGoals": 7,
-      "awayGoals": 3,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
       "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": "confirmed"
     },
     {

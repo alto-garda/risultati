@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-11",
+  "updatedAt": "2026-11-12",
   "fixtures": [
     {
       "id": 10866135,
@@ -15,13 +15,13 @@
       "time": "17:00",
       "home": "ALTO GARDA",
       "away": "CALCIO DESENZANO",
-      "homeGoals": 4,
-      "awayGoals": 1,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "C.S.COMUNALE",
       "fieldAddress": "VIA FASSE SNC, LIMONE SUL GARDA (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": null
     },
     {
@@ -47,13 +47,13 @@
       "time": "15:00",
       "home": "ALTO GARDA",
       "away": "FOOTBALL CLUB BEDIZZOLE",
-      "homeGoals": 5,
-      "awayGoals": 2,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
       "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": "confirmed"
     },
     {
@@ -79,13 +79,13 @@
       "time": "15:00",
       "home": "ALTO GARDA",
       "away": "VOBARNO",
-      "homeGoals": 3,
-      "awayGoals": 3,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
       "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": "confirmed"
     },
     {

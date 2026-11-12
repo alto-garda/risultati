@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-11",
+  "updatedAt": "2026-11-12",
   "fixtures": [
     {
       "id": 10867257,
@@ -47,13 +47,13 @@
       "time": "15:00",
       "home": "ALTO GARDA (NERA)",
       "away": "US ROVIZZA SIRMIONE ASD",
-      "homeGoals": 6,
-      "awayGoals": 4,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "C.S.COMUNALE",
       "fieldAddress": "VIA FASSE SNC, LIMONE SUL GARDA (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": null
     },
     {
@@ -63,13 +63,13 @@
       "time": "17:00",
       "home": "ALTO GARDA (BLU)",
       "away": "FOOTBALL CLUB BEDIZZOLE",
-      "homeGoals": 5,
-      "awayGoals": 1,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
       "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": null
     },
     {
@@ -112,12 +112,12 @@
       "home": "ALTO GARDA (NERA)",
       "away": "CILIVERGHE MAZZANO",
       "homeGoals": 0,
-      "awayGoals": 4,
+      "awayGoals": 0,
       "field": "C.S.COMUNALE",
       "fieldAddress": "VIA FASSE SNC, LIMONE SUL GARDA (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": null
     },
     {
@@ -127,13 +127,13 @@
       "time": "17:00",
       "home": "ALTO GARDA (BLU)",
       "away": "CALCIO ALTA VALSABBIA",
-      "homeGoals": 2,
-      "awayGoals": 3,
+      "homeGoals": 0,
+      "awayGoals": 0,
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
       "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
-      "isPlayed": true,
-      "resultState": 1,
+      "isPlayed": false,
+      "resultState": 0,
       "variation": null
     },
     {
