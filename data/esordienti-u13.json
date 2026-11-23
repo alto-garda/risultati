@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-22",
+  "updatedAt": "2026-11-23",
   "fixtures": [
     {
       "id": 10810696,
@@ -145,12 +145,12 @@
       "away": "CALCINATO",
       "homeGoals": 0,
       "awayGoals": 0,
-      "field": "C.S.COMUNALE",
-      "fieldAddress": "VIA FASSE SNC, LIMONE SUL GARDA (BS)",
+      "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
+      "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
       "isRest": false,
       "isPlayed": false,
       "resultState": 0,
-      "variation": null
+      "variation": "open"
     }
   ]
 }

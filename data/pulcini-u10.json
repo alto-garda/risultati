@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-22",
+  "updatedAt": "2026-11-23",
   "fixtures": [
     {
       "id": 10868453,
@@ -111,22 +111,6 @@
       "time": "15:00",
       "home": "ALTO GARDA",
       "away": "FOOTBALL CLUB BEDIZZOLE",
-      "homeGoals": 0,
-      "awayGoals": 0,
-      "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
-      "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
-      "isRest": false,
-      "isPlayed": false,
-      "resultState": 0,
-      "variation": null
-    },
-    {
-      "id": 10868489,
-      "giornata": 8,
-      "date": "2026-11-21",
-      "time": "15:00",
-      "home": "ALTO GARDA",
-      "away": "USO NUVOLENTO",
       "homeGoals": 0,
       "awayGoals": 0,
       "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
