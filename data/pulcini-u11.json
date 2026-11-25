@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "fixtures": [
     {
       "id": 10867257,
@@ -252,17 +252,17 @@
       "id": 10867299,
       "giornata": 9,
       "date": "2026-11-28",
-      "time": "17:00",
+      "time": "16:00",
       "home": "ALTO GARDA (BLU)",
       "away": "VOLUNTAS ASD         SQ.D",
       "homeGoals": 0,
       "awayGoals": 0,
-      "field": "CAMPO \"U.LOCATELLI\" AZZ.ITALIA",
-      "fieldAddress": "VIA RELIGIONE,35, TOSCOLANO MADERNO (BS)",
+      "field": "C.S.COMUNALE",
+      "fieldAddress": "VIA FASSE SNC, LIMONE SUL GARDA (BS)",
       "isRest": false,
       "isPlayed": false,
       "resultState": 0,
-      "variation": null
+      "variation": "confirmed"
     },
     {
       "id": 10867300,

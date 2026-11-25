@@ -6,7 +6,7 @@
   "season": "2026/2027",
   "phase": "Andata",
   "team": "ALTO GARDA",
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "fixtures": [
     {
       "id": 10810696,
@@ -150,7 +150,7 @@
       "isRest": false,
       "isPlayed": false,
       "resultState": 0,
-      "variation": "open"
+      "variation": "confirmed"
     }
   ]
 }
